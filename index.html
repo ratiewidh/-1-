@@ -10,6 +10,8 @@
 
   <title>Morning Y Market Radar</title>
 
+  <meta name="theme-color" content="#020617" />
+
   <style>
 
     body {
@@ -36,11 +38,13 @@
 
     h1 {
 
-      margin: 0 0 14px;
+      margin: 0 0 20px;
 
       font-size: 48px;
 
       font-weight: 800;
+
+      line-height: 1.1;
 
     }
 
@@ -78,6 +82,8 @@
 
       line-height: 1.15;
 
+      word-break: break-word;
+
     }
 
     .change {
@@ -94,15 +100,21 @@
 
     .down { color: #ef4444; }
 
+    .neutral { color: #cbd5e1; }
+
     .btns, .tabs {
 
       display: grid;
 
-      grid-template-columns: 1fr 1fr;
-
       gap: 16px;
 
       margin-bottom: 22px;
+
+    }
+
+    .btns {
+
+      grid-template-columns: 1fr 1fr;
 
     }
 
@@ -136,6 +148,12 @@
 
     }
 
+    .main-btn.active {
+
+      background: #059669;
+
+    }
+
     .sub-btn {
 
       background: #1e293b;
@@ -143,6 +161,14 @@
       color: white;
 
       border: 1px solid #334155;
+
+    }
+
+    .sub-btn.active {
+
+      background: #10b981;
+
+      border-color: #10b981;
 
     }
 
@@ -198,7 +224,7 @@
 
       <div id="btcPrice" class="price">불러오는 중...</div>
 
-      <div id="btcChange" class="change">전일 대비 -</div>
+      <div id="btcChange" class="change neutral">전일 대비 -</div>
 
     </div>
 
@@ -208,7 +234,7 @@
 
       <div id="ethPrice" class="price">불러오는 중...</div>
 
-      <div id="ethChange" class="change">전일 대비 -</div>
+      <div id="ethChange" class="change neutral">전일 대비 -</div>
 
     </div>
 
@@ -218,7 +244,7 @@
 
       <div id="mstrPrice" class="price">$171.02</div>
 
-      <div id="mstrChange" class="change">전일 대비 -</div>
+      <div id="mstrChange" class="change neutral">전일 대비 -</div>
 
     </div>
 
@@ -228,7 +254,7 @@
 
       <div id="nasdaqPrice" class="price">$18,450.31</div>
 
-      <div id="nasdaqChange" class="change">전일 대비 -</div>
+      <div id="nasdaqChange" class="change neutral">전일 대비 -</div>
 
     </div>
 
@@ -236,17 +262,17 @@
 
       <button class="main-btn" onclick="refreshAll()">새로고침</button>
 
-      <button id="autoBtn" class="main-btn" onclick="toggleAuto()">자동 새로고침 켜짐</button>
+      <button id="autoBtn" class="main-btn active" onclick="toggleAuto()">자동 새로고침 켜짐</button>
 
     </div>
 
     <div class="tabs">
 
-      <button class="main-btn" onclick="showNews('coin')">코인</button>
+      <button id="tab-coin" class="sub-btn active" onclick="showNews('coin')">코인</button>
 
-      <button class="sub-btn" onclick="showNews('war')">전쟁</button>
+      <button id="tab-war" class="sub-btn" onclick="showNews('war')">전쟁</button>
 
-      <button class="sub-btn" onclick="showNews('market')">시장</button>
+      <button id="tab-market" class="sub-btn" onclick="showNews('market')">시장</button>
 
     </div>
 
@@ -312,13 +338,31 @@
 
     }
 
-    async function fetchUpbit(market) {
+    async function fetchCoinGecko() {
 
-      const r = await fetch(`https://api.upbit.com/v1/ticker?markets=${market}`);
+      const r = await fetch(
+
+        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=krw&include_24hr_change=true",
+
+        { cache: "no-store" }
+
+      );
+
+      if (!r.ok) throw new Error("CoinGecko fetch failed");
 
       const d = await r.json();
 
-      return d[0];
+      return {
+
+        btcPrice: d.bitcoin.krw,
+
+        btcChange: d.bitcoin.krw_24h_change || 0,
+
+        ethPrice: d.ethereum.krw,
+
+        ethChange: d.ethereum.krw_24h_change || 0
+
+      };
 
     }
 
@@ -326,25 +370,39 @@
 
       try {
 
-        const btc = await fetchUpbit("KRW-BTC");
+        const data = await fetchCoinGecko();
 
-        const eth = await fetchUpbit("KRW-ETH");
+        document.getElementById("btcPrice").textContent = formatKRW(data.btcPrice);
 
-        document.getElementById("btcPrice").textContent = formatKRW(btc.trade_price);
+        document.getElementById("ethPrice").textContent = formatKRW(data.ethPrice);
 
-        document.getElementById("ethPrice").textContent = formatKRW(eth.trade_price);
+        setChange("btcChange", data.btcChange);
 
-        setChange("btcChange", btc.signed_change_rate * 100);
-
-        setChange("ethChange", eth.signed_change_rate * 100);
+        setChange("ethChange", data.ethChange);
 
         document.getElementById("mstrChange").textContent = "전일 대비 +0.00%";
 
+        document.getElementById("mstrChange").className = "change neutral";
+
         document.getElementById("nasdaqChange").textContent = "전일 대비 +0.00%";
+
+        document.getElementById("nasdaqChange").className = "change neutral";
 
       } catch (e) {
 
         console.error(e);
+
+        document.getElementById("btcPrice").textContent = "불러오기 실패";
+
+        document.getElementById("ethPrice").textContent = "불러오기 실패";
+
+        document.getElementById("btcChange").textContent = "다시 새로고침";
+
+        document.getElementById("ethChange").textContent = "다시 새로고침";
+
+        document.getElementById("btcChange").className = "change neutral";
+
+        document.getElementById("ethChange").className = "change neutral";
 
       }
 
@@ -358,7 +416,7 @@
 
       btn.textContent = autoOn ? "자동 새로고침 켜짐" : "자동 새로고침 꺼짐";
 
-      btn.style.background = autoOn ? "#059669" : "#1e293b";
+      btn.className = autoOn ? "main-btn active" : "sub-btn";
 
       if (autoOn) {
 
@@ -373,6 +431,14 @@
     }
 
     function showNews(type) {
+
+      document.getElementById("tab-coin").classList.remove("active");
+
+      document.getElementById("tab-war").classList.remove("active");
+
+      document.getElementById("tab-market").classList.remove("active");
+
+      document.getElementById("tab-" + type).classList.add("active");
 
       const box = document.getElementById("newsArea");
 
