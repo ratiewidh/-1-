@@ -14,17 +14,41 @@
 
   <style>
 
+    :root{
+
+      --bg:#020617;
+
+      --card:#111827;
+
+      --border:#1f2937;
+
+      --text:#f8fafc;
+
+      --muted:#cbd5e1;
+
+      --green:#10b981;
+
+      --green-dark:#059669;
+
+      --red:#ef4444;
+
+      --button:#1e293b;
+
+    }
+
+    * { box-sizing: border-box; }
+
     body {
 
       margin: 0;
 
-      background: #020617;
+      background: var(--bg);
 
-      color: #f8fafc;
+      color: var(--text);
 
       font-family: Arial, sans-serif;
 
-      padding: 24px;
+      padding: 20px;
 
     }
 
@@ -38,27 +62,27 @@
 
     h1 {
 
-      margin: 0 0 22px;
+      margin: 0 0 18px;
 
-      font-size: 48px;
+      font-size: 34px;
 
       font-weight: 800;
 
-      line-height: 1.08;
+      line-height: 1.1;
 
     }
 
     .card {
 
-      background: #111827;
+      background: var(--card);
 
-      border: 1px solid #1f2937;
+      border: 1px solid var(--border);
 
       border-radius: 28px;
 
-      padding: 28px;
+      padding: 26px;
 
-      margin-bottom: 22px;
+      margin-bottom: 20px;
 
       box-shadow: 0 10px 24px rgba(0,0,0,.22);
 
@@ -66,9 +90,9 @@
 
     .label {
 
-      font-size: 28px;
+      font-size: 20px;
 
-      color: #cbd5e1;
+      color: var(--muted);
 
       margin-bottom: 14px;
 
@@ -76,7 +100,7 @@
 
     .price {
 
-      font-size: 56px;
+      font-size: 38px;
 
       font-weight: 800;
 
@@ -90,39 +114,31 @@
 
       margin-top: 14px;
 
-      font-size: 24px;
+      font-size: 18px;
 
       font-weight: 700;
 
     }
 
-    .up { color: #10b981; }
+    .up { color: var(--green); }
 
-    .down { color: #ef4444; }
+    .down { color: var(--red); }
 
-    .neutral { color: #cbd5e1; }
+    .neutral { color: var(--muted); }
 
     .btns, .tabs {
 
       display: grid;
 
-      gap: 16px;
+      gap: 14px;
 
-      margin-bottom: 22px;
-
-    }
-
-    .btns {
-
-      grid-template-columns: 1fr 1fr;
+      margin-bottom: 18px;
 
     }
 
-    .tabs {
+    .btns { grid-template-columns: 1fr 1fr; }
 
-      grid-template-columns: 1fr 1fr 1fr;
-
-    }
+    .tabs { grid-template-columns: 1fr 1fr 1fr; }
 
     button {
 
@@ -130,9 +146,9 @@
 
       border-radius: 22px;
 
-      min-height: 72px;
+      min-height: 58px;
 
-      font-size: 30px;
+      font-size: 18px;
 
       font-weight: 800;
 
@@ -142,7 +158,7 @@
 
     .main-btn {
 
-      background: #10b981;
+      background: var(--green);
 
       color: white;
 
@@ -150,13 +166,13 @@
 
     .main-btn.active {
 
-      background: #059669;
+      background: var(--green-dark);
 
     }
 
     .sub-btn {
 
-      background: #1e293b;
+      background: var(--button);
 
       color: white;
 
@@ -166,59 +182,59 @@
 
     .sub-btn.active {
 
-      background: #10b981;
+      background: var(--green);
 
-      border-color: #10b981;
+      border-color: var(--green);
 
     }
 
     .news-btn {
 
-      background: #1e293b;
+      display: block;
+
+      width: 100%;
+
+      background: var(--button);
 
       color: white;
 
       border: 1px solid #334155;
 
-      min-height: 88px;
+      border-radius: 22px;
 
-      width: 100%;
+      min-height: 78px;
 
-      margin-bottom: 18px;
+      padding: 18px;
+
+      margin-bottom: 14px;
 
       text-align: center;
 
-      font-size: 26px;
-
-    }
-
-    .status {
-
-      color: #94a3b8;
-
       font-size: 18px;
 
-      margin-bottom: 20px;
+      font-weight: 800;
+
+      text-decoration: none;
+
+      line-height: 1.3;
 
     }
 
-    @media (max-width: 900px) {
+    @media (min-width: 900px) {
 
-      body { padding: 18px; }
+      body { padding: 28px; }
 
-      h1 { font-size: 34px; }
+      h1 { font-size: 48px; }
 
-      .label { font-size: 20px; }
+      .label { font-size: 28px; }
 
-      .price { font-size: 38px; }
+      .price { font-size: 56px; }
 
-      .change { font-size: 18px; }
+      .change { font-size: 24px; }
 
-      button { min-height: 56px; font-size: 22px; }
+      button { min-height: 72px; font-size: 28px; }
 
-      .news-btn { min-height: 72px; font-size: 22px; }
-
-      .status { font-size: 14px; }
+      .news-btn { min-height: 88px; font-size: 24px; }
 
     }
 
@@ -231,8 +247,6 @@
   <div class="wrap">
 
     <h1>Morning Y Market Radar</h1>
-
-    <div class="status">BTC/ETH는 공개 API 기준, MSTR/NASDAQ/HLB는 최신값 또는 대체값 기준으로 표시됩니다.</div>
 
     <div class="card">
 
@@ -312,22 +326,6 @@
 
     let timer = null;
 
-    const fallback = {
-
-      mstrPrice: 171.02,
-
-      mstrChange: 0.00,
-
-      nasdaqPrice: 18450.31,
-
-      nasdaqChange: 0.00,
-
-      hlbPrice: 60000,
-
-      hlbChange: 0.00
-
-    };
-
     const newsSets = {
 
       coin: [
@@ -356,7 +354,7 @@
 
         ["미국 금리 최신뉴스", "https://news.google.com/search?q=%EB%AF%B8%EA%B5%AD%20%EA%B8%88%EB%A6%AC&hl=ko&gl=KR&ceid=KR:ko"],
 
-        ["HLB 최신뉴스", "https://news.google.com/search?q=HLB%20%EC%A3%BC%EC%8B%9D&hl=ko&gl=KR&ceid=KR:ko"]
+        ["미국 경제 최신뉴스", "https://news.google.com/search?q=%EB%AF%B8%EA%B5%AD%20%EA%B2%BD%EC%A0%9C&hl=ko&gl=KR&ceid=KR:ko"]
 
       ]
 
@@ -368,31 +366,25 @@
 
     }
 
-    function formatUSD(v) {
-
-      return new Intl.NumberFormat("en-US", {
-
-        style: "currency",
-
-        currency: "USD",
-
-        maximumFractionDigits: 2
-
-      }).format(v);
-
-    }
-
     function setChange(id, value) {
 
       const el = document.getElementById(id);
 
-      const up = value > 0;
+      if (value === null || value === undefined || Number.isNaN(value)) {
 
-      const down = value < 0;
+        el.textContent = "전일 대비 -";
+
+        el.className = "change neutral";
+
+        return;
+
+      }
+
+      const up = value >= 0;
 
       el.textContent = `전일 대비 ${value > 0 ? "+" : ""}${value.toFixed(2)}%`;
 
-      el.className = "change " + (up ? "up" : down ? "down" : "neutral");
+      el.className = "change " + (up ? "up" : "down");
 
     }
 
@@ -412,15 +404,49 @@
 
       return {
 
-        btcPrice: d.bitcoin.krw,
+        btcPrice: d?.bitcoin?.krw,
 
-        btcChange: d.bitcoin.krw_24h_change || 0,
+        btcChange: d?.bitcoin?.krw_24h_change,
 
-        ethPrice: d.ethereum.krw,
+        ethPrice: d?.ethereum?.krw,
 
-        ethChange: d.ethereum.krw_24h_change || 0
+        ethChange: d?.ethereum?.krw_24h_change
 
       };
+
+    }
+
+    function showNews(type) {
+
+      document.getElementById("tab-coin").classList.remove("active");
+
+      document.getElementById("tab-war").classList.remove("active");
+
+      document.getElementById("tab-market").classList.remove("active");
+
+      document.getElementById("tab-" + type).classList.add("active");
+
+      const box = document.getElementById("newsArea");
+
+      box.innerHTML = "";
+
+      newsSets[type].forEach(([label, url]) => {
+
+        const a = document.createElement("a");
+
+        a.className = "news-btn";
+
+        a.textContent = label;
+
+        a.href = url;
+
+        a.target = "_blank";
+
+        a.rel = "noreferrer";
+
+        box.appendChild(a);
+
+      });
 
     }
 
@@ -430,25 +456,23 @@
 
         const data = await fetchCoinGecko();
 
-        document.getElementById("btcPrice").textContent = formatKRW(data.btcPrice);
+        document.getElementById("btcPrice").textContent =
 
-        document.getElementById("ethPrice").textContent = formatKRW(data.ethPrice);
+          data.btcPrice ? formatKRW(data.btcPrice) : "불러오기 실패";
+
+        document.getElementById("ethPrice").textContent =
+
+          data.ethPrice ? formatKRW(data.ethPrice) : "불러오기 실패";
 
         setChange("btcChange", data.btcChange);
 
         setChange("ethChange", data.ethChange);
 
-        document.getElementById("mstrPrice").textContent = formatUSD(fallback.mstrPrice);
+        setChange("mstrChange", null);
 
-        document.getElementById("nasdaqPrice").textContent = formatUSD(fallback.nasdaqPrice);
+        setChange("nasdaqChange", null);
 
-        document.getElementById("hlbPrice").textContent = formatKRW(fallback.hlbPrice);
-
-        setChange("mstrChange", fallback.mstrChange);
-
-        setChange("nasdaqChange", fallback.nasdaqChange);
-
-        setChange("hlbChange", fallback.hlbChange);
+        setChange("hlbChange", null);
 
       } catch (e) {
 
@@ -458,13 +482,9 @@
 
         document.getElementById("ethPrice").textContent = "불러오기 실패";
 
-        document.getElementById("btcChange").textContent = "다시 새로고침";
+        setChange("btcChange", null);
 
-        document.getElementById("ethChange").textContent = "다시 새로고침";
-
-        document.getElementById("btcChange").className = "change neutral";
-
-        document.getElementById("ethChange").className = "change neutral";
+        setChange("ethChange", null);
 
       }
 
@@ -489,36 +509,6 @@
         clearInterval(timer);
 
       }
-
-    }
-
-    function showNews(type) {
-
-      document.getElementById("tab-coin").classList.remove("active");
-
-      document.getElementById("tab-war").classList.remove("active");
-
-      document.getElementById("tab-market").classList.remove("active");
-
-      document.getElementById("tab-" + type).classList.add("active");
-
-      const box = document.getElementById("newsArea");
-
-      box.innerHTML = "";
-
-      newsSets[type].forEach(([label, url]) => {
-
-        const btn = document.createElement("button");
-
-        btn.className = "news-btn";
-
-        btn.textContent = label;
-
-        btn.onclick = () => window.open(url, "_blank");
-
-        box.appendChild(btn);
-
-      });
 
     }
 
