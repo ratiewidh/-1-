@@ -30,7 +30,7 @@
 
     .wrap {
 
-      max-width: 720px;
+      max-width: 760px;
 
       margin: 0 auto;
 
@@ -38,13 +38,13 @@
 
     h1 {
 
-      margin: 0 0 20px;
+      margin: 0 0 22px;
 
       font-size: 48px;
 
       font-weight: 800;
 
-      line-height: 1.1;
+      line-height: 1.08;
 
     }
 
@@ -188,6 +188,18 @@
 
       text-align: center;
 
+      font-size: 26px;
+
+    }
+
+    .status {
+
+      color: #94a3b8;
+
+      font-size: 18px;
+
+      margin-bottom: 20px;
+
     }
 
     @media (max-width: 900px) {
@@ -204,7 +216,9 @@
 
       button { min-height: 56px; font-size: 22px; }
 
-      .news-btn { min-height: 72px; }
+      .news-btn { min-height: 72px; font-size: 22px; }
+
+      .status { font-size: 14px; }
 
     }
 
@@ -217,6 +231,8 @@
   <div class="wrap">
 
     <h1>Morning Y Market Radar</h1>
+
+    <div class="status">BTC/ETH는 공개 API 기준, MSTR/NASDAQ/HLB는 최신값 또는 대체값 기준으로 표시됩니다.</div>
 
     <div class="card">
 
@@ -258,6 +274,16 @@
 
     </div>
 
+    <div class="card">
+
+      <div class="label">HLB</div>
+
+      <div id="hlbPrice" class="price">60,000원</div>
+
+      <div id="hlbChange" class="change neutral">전일 대비 -</div>
+
+    </div>
+
     <div class="btns">
 
       <button class="main-btn" onclick="refreshAll()">새로고침</button>
@@ -285,6 +311,22 @@
     let autoOn = true;
 
     let timer = null;
+
+    const fallback = {
+
+      mstrPrice: 171.02,
+
+      mstrChange: 0.00,
+
+      nasdaqPrice: 18450.31,
+
+      nasdaqChange: 0.00,
+
+      hlbPrice: 60000,
+
+      hlbChange: 0.00
+
+    };
 
     const newsSets = {
 
@@ -314,7 +356,7 @@
 
         ["미국 금리 최신뉴스", "https://news.google.com/search?q=%EB%AF%B8%EA%B5%AD%20%EA%B8%88%EB%A6%AC&hl=ko&gl=KR&ceid=KR:ko"],
 
-        ["미국 경제 최신뉴스", "https://news.google.com/search?q=%EB%AF%B8%EA%B5%AD%20%EA%B2%BD%EC%A0%9C&hl=ko&gl=KR&ceid=KR:ko"]
+        ["HLB 최신뉴스", "https://news.google.com/search?q=HLB%20%EC%A3%BC%EC%8B%9D&hl=ko&gl=KR&ceid=KR:ko"]
 
       ]
 
@@ -326,15 +368,31 @@
 
     }
 
+    function formatUSD(v) {
+
+      return new Intl.NumberFormat("en-US", {
+
+        style: "currency",
+
+        currency: "USD",
+
+        maximumFractionDigits: 2
+
+      }).format(v);
+
+    }
+
     function setChange(id, value) {
 
       const el = document.getElementById(id);
 
-      const up = value >= 0;
+      const up = value > 0;
+
+      const down = value < 0;
 
       el.textContent = `전일 대비 ${value > 0 ? "+" : ""}${value.toFixed(2)}%`;
 
-      el.className = "change " + (up ? "up" : "down");
+      el.className = "change " + (up ? "up" : down ? "down" : "neutral");
 
     }
 
@@ -380,13 +438,17 @@
 
         setChange("ethChange", data.ethChange);
 
-        document.getElementById("mstrChange").textContent = "전일 대비 +0.00%";
+        document.getElementById("mstrPrice").textContent = formatUSD(fallback.mstrPrice);
 
-        document.getElementById("mstrChange").className = "change neutral";
+        document.getElementById("nasdaqPrice").textContent = formatUSD(fallback.nasdaqPrice);
 
-        document.getElementById("nasdaqChange").textContent = "전일 대비 +0.00%";
+        document.getElementById("hlbPrice").textContent = formatKRW(fallback.hlbPrice);
 
-        document.getElementById("nasdaqChange").className = "change neutral";
+        setChange("mstrChange", fallback.mstrChange);
+
+        setChange("nasdaqChange", fallback.nasdaqChange);
+
+        setChange("hlbChange", fallback.hlbChange);
 
       } catch (e) {
 
